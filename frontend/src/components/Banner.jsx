@@ -1,5 +1,6 @@
 import React, { use } from 'react';
 import { assets } from '../assets/assets';
+import { useNavigate } from 'react-router-dom';
 
 const Banner = () => {
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Banner = () => {
         <p className="text-white text-lg sm:text-xl">
           Connect with experienced healthcare professionals and manage your appointments easily.
         </p>
-        <button onClick={()=>{navigate('/login')}} className="bg-white text-purple-600 font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-full hover:bg-gray-100 transition-all duration-300 w-max">
+        <button onClick={()=>{navigate('/login'); scrollTo(0,0)}} className="bg-white text-purple-600 font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-full hover:bg-gray-100 transition-all duration-300 w-max">
           Register Now
         </button>
       </div>

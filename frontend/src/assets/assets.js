@@ -45,7 +45,7 @@ export const specialties = [
         image: dermatology      
     },
     {
-        specialty: 'Pediatrician',
+        specialty: 'Pediatricians',
         image: pediatrician
     },
     {
@@ -100,7 +100,7 @@ export const doctors=[
         _id: 'doc3',
         name: 'Dr. Sophia Taylor',
         image: doc3,
-        specialty: 'Pediatrician',
+        specialty: 'Pediatricians',
         experience: 12,
         degree: 'MBBS',
         fee: 180,
