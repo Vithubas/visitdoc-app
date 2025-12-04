@@ -7,6 +7,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
     const [token, setToken] = useState(true);
+    const [showProfileMenu, setShowProfileMenu] = useState(false); // Add this state
 
   return (
     <nav className='sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-md border-b-2 border-purple-100'>
@@ -116,8 +117,11 @@ const Navbar = () => {
           {/* User Profile / Register Button */}
           <div className='flex items-center gap-4'>
             {token ? (
-              <div className='relative group'>
-                <div className='flex items-center gap-2 cursor-pointer bg-gradient-to-r from-purple-50 to-purple-100 px-4 py-2 rounded-full border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 hover:shadow-lg'>
+              <div className='relative'>
+                <div 
+                  onClick={() => setShowProfileMenu(!showProfileMenu)} // Change to onClick
+                  className='flex items-center gap-2 cursor-pointer bg-gradient-to-r from-purple-50 to-purple-100 px-4 py-2 rounded-full border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 hover:shadow-lg'
+                >
                   <img 
                     className='w-10 h-10 rounded-full border-2 border-white shadow-md object-cover' 
                     src={assets.profile1} 
@@ -125,7 +129,7 @@ const Navbar = () => {
                   />
                   <span className='hidden sm:block text-purple-900 font-semibold'>Account</span>
                   <svg 
-                    className='w-4 h-4 text-purple-700 transition-transform group-hover:rotate-180 duration-300' 
+                    className={`w-4 h-4 text-purple-700 transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`}
                     fill='none' 
                     stroke='currentColor' 
                     viewBox='0 0 24 24'
@@ -135,48 +139,59 @@ const Navbar = () => {
                 </div>
 
                 {/* Dropdown Menu */}
-                <div className='absolute top-16 right-0 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2'>
-                  <div className='bg-white rounded-2xl shadow-2xl border-2 border-purple-200 overflow-hidden'>
-                    <div className='bg-gradient-to-r from-purple-600 to-purple-800 p-4 text-white'>
-                      <p className='font-bold text-lg'>Welcome Back!</p>
-                      <p className='text-purple-100 text-sm'>Manage your account</p>
-                    </div>
-                    
-                    <div className='p-2'>
-                      <button
-                        onClick={() => navigate('my-profile')}
-                        className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-purple-900 hover:bg-purple-50 transition-all duration-300 group/item'
-                      >
-                        <svg className='w-5 h-5 text-purple-600 group-hover/item:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' />
-                        </svg>
-                        <span className='font-medium'>My Profile</span>
-                      </button>
+                {showProfileMenu && ( // Change condition
+                  <div className='absolute top-16 right-0 w-56 z-50'>
+                    <div className='bg-white rounded-2xl shadow-2xl border-2 border-purple-200 overflow-hidden'>
+                      <div className='bg-gradient-to-r from-purple-600 to-purple-800 p-4 text-white'>
+                        <p className='font-bold text-lg'>Welcome Back!</p>
+                        <p className='text-purple-100 text-sm'>Manage your account</p>
+                      </div>
                       
-                      <button
-                        onClick={() => navigate('my-appointments')}
-                        className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-purple-900 hover:bg-purple-50 transition-all duration-300 group/item'
-                      >
-                        <svg className='w-5 h-5 text-purple-600 group-hover/item:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' />
-                        </svg>
-                        <span className='font-medium'>My Appointments</span>
-                      </button>
-                      
-                      <div className='border-t border-purple-100 my-2'></div>
-                      
-                      <button
-                        onClick={() => setToken(false)}
-                        className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-300 group/item'
-                      >
-                        <svg className='w-5 h-5 group-hover/item:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1' />
-                        </svg>
-                        <span className='font-medium'>Logout</span>
-                      </button>
+                      <div className='p-2'>
+                        <button
+                          onClick={() => {
+                            navigate('my-profile');
+                            setShowProfileMenu(false);
+                          }}
+                          className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-purple-900 hover:bg-purple-50 transition-all duration-300 group/item'
+                        >
+                          <svg className='w-5 h-5 text-purple-600 group-hover/item:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' />
+                          </svg>
+                          <span className='font-medium'>My Profile</span>
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            navigate('my-appointments');
+                            setShowProfileMenu(false);
+                          }}
+                          className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-purple-900 hover:bg-purple-50 transition-all duration-300 group/item'
+                        >
+                          <svg className='w-5 h-5 text-purple-600 group-hover/item:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' />
+                          </svg>
+                          <span className='font-medium'>My Appointments</span>
+                        </button>
+                        
+                        <div className='border-t border-purple-100 my-2'></div>
+                        
+                        <button
+                          onClick={() => {
+                            setToken(false);
+                            setShowProfileMenu(false);
+                          }}
+                          className='w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all duration-300 group/item'
+                        >
+                          <svg className='w-5 h-5 group-hover/item:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1' />
+                          </svg>
+                          <span className='font-medium'>Logout</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             ) : (
               <button 
@@ -279,6 +294,7 @@ const Navbar = () => {
                   Register
                 </button>
               )}
+              
             </div>
           </div>
         )}
