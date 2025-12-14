@@ -42,9 +42,11 @@ const DoctorProfile = () => {
                 // Update profile data with the returned data to show new image immediately
                 if (data.profileData) {
                     setProfileData(data.profileData)
-                } else {
-                    getProfileData()
                 }
+                // Force page refresh to show updated data
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000)
             } else {
                 toast.error(data.message)
             }

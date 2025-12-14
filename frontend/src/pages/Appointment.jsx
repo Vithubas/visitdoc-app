@@ -3,21 +3,23 @@ import { useParams } from 'react-router-dom'
 import { useContext, useState } from 'react'
 import { AppContext } from '../context/AppContext';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Appointment = () => {
-  const {docId} = useParams();
-  const {doctors, currencySymbol} = useContext(AppContext);
+  const { docId } = useParams();
+  const { doctors, currencySymbol, token, backendUrl } = useContext(AppContext);
   const [docInfo, setDocInfo] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedTime, setSelectedTime] = useState(null);
   const navigate = useNavigate();
-  
+
   // Generate next 7 days
   const getNext7Days = () => {
     const days = [];
     const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    
+
     for (let i = 0; i < 7; i++) {
       const date = new Date();
       date.setDate(date.getDate() + i);
@@ -40,8 +42,8 @@ const Appointment = () => {
   ];
 
   const days = getNext7Days();
-  
-  const fetchDocInfo = async() => {
+
+  const fetchDocInfo = async () => {
     const docInfo = doctors.find((doc) => doc._id === docId);
     setDocInfo(docInfo);
     console.log(docInfo);
@@ -51,12 +53,36 @@ const Appointment = () => {
     fetchDocInfo();
   }, [doctors, docId]);
 
-  const handleBooking = () => {
-    if (selectedDay && selectedTime) {
-      alert(`Appointment booked with Dr. ${docInfo.name} on ${selectedDay.day}, ${selectedDay.month} ${selectedDay.date} at ${selectedTime}`);
-      // Add your booking logic here
-    } else {
-      alert('Please select a day and time slot');
+  const handleBooking = async () => {
+    if (!token) {
+      toast.error('Please login to book an appointment');
+      navigate('/login');
+      return;
+    }
+
+    if (!selectedDay || !selectedTime) {
+      toast.error('Please select a day and time slot');
+      return;
+    }
+
+    try {
+      const slotDate = `${selectedDay.date} ${selectedDay.month} ${selectedDay.fullDate.getFullYear()}`;
+
+      const { data } = await axios.post(backendUrl + '/api/user/book-appointment', {
+        docId,
+        slotDate,
+        slotTime: selectedTime
+      }, { headers: { token } });
+
+      if (data.success) {
+        toast.success('Appointment booked successfully!');
+        navigate('/my-appointments');
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message || 'Failed to book appointment');
     }
   };
 
@@ -83,10 +109,15 @@ const Appointment = () => {
             <div className='flex justify-center items-start'>
               <div className='relative'>
                 <div className='absolute inset-0 bg-gradient-to-br from-purple-400 to-purple-600 rounded-3xl blur-2xl opacity-30'></div>
-                <img 
-                  src={docInfo.image} 
+                <img
+                  src={docInfo.image}
                   alt={docInfo.name}
                   className='relative w-full max-w-sm rounded-3xl border-4 border-white shadow-2xl'
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    const initial = docInfo.name?.charAt(0).toUpperCase() || 'D';
+                    e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect fill='%236366f1' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='80' fill='white'%3E${initial}%3C/text%3E%3C/svg%3E`;
+                  }}
                 />
                 <div className='absolute top-4 right-4 bg-white rounded-full px-4 py-2 shadow-lg border-2 border-purple-200'>
                   <div className='flex items-center gap-2 text-sm text-green-600 font-bold'>
@@ -103,7 +134,7 @@ const Appointment = () => {
                 <h1 className='text-4xl font-bold text-purple-900'>{docInfo.name}</h1>
                 <div className='bg-purple-700 text-white p-2 rounded-full'>
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 </div>
               </div>
@@ -145,6 +176,79 @@ const Appointment = () => {
           </div>
         </div>
 
+        {/* Doctor Schedule Section */}
+        {docInfo.workingDays && docInfo.timeSlots && (
+          <div className='bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl shadow-xl border-2 border-blue-200 p-8 mb-12'>
+            <h2 className='text-3xl font-bold text-purple-900 mb-6 flex items-center gap-3'>
+              <span className='text-4xl'>📅</span>
+              Doctor's Schedule
+            </h2>
+
+            <div className='grid md:grid-cols-2 gap-6'>
+              {/* Working Days */}
+              <div className='bg-white rounded-2xl p-6 border-2 border-purple-200'>
+                <h3 className='text-xl font-bold text-purple-900 mb-4 flex items-center gap-2'>
+                  <span className='text-2xl'>📆</span>
+                  Working Days
+                </h3>
+                <div className='flex flex-wrap gap-2'>
+                  {docInfo.workingDays.map((day, index) => (
+                    <span key={index} className='bg-purple-100 text-purple-700 px-4 py-2 rounded-full font-semibold border-2 border-purple-300'>
+                      {day}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Working Hours */}
+              <div className='bg-white rounded-2xl p-6 border-2 border-purple-200'>
+                <h3 className='text-xl font-bold text-purple-900 mb-4 flex items-center gap-2'>
+                  <span className='text-2xl'>⏰</span>
+                  Working Hours
+                </h3>
+                <div className='space-y-3'>
+                  <div className='flex items-center gap-3'>
+                    <span className='text-purple-600 font-medium'>Start:</span>
+                    <span className='bg-green-100 text-green-700 px-4 py-2 rounded-lg font-bold border-2 border-green-300'>
+                      {docInfo.timeSlots.startTime}
+                    </span>
+                  </div>
+                  <div className='flex items-center gap-3'>
+                    <span className='text-purple-600 font-medium'>End:</span>
+                    <span className='bg-red-100 text-red-700 px-4 py-2 rounded-lg font-bold border-2 border-red-300'>
+                      {docInfo.timeSlots.endTime}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Slot Duration */}
+              <div className='bg-white rounded-2xl p-6 border-2 border-purple-200'>
+                <h3 className='text-xl font-bold text-purple-900 mb-4 flex items-center gap-2'>
+                  <span className='text-2xl'>⏱️</span>
+                  Appointment Duration
+                </h3>
+                <div className='bg-blue-100 text-blue-700 px-6 py-3 rounded-lg font-bold text-xl border-2 border-blue-300 inline-block'>
+                  {docInfo.timeSlots.slotDuration} minutes
+                </div>
+              </div>
+
+              {/* Break Time */}
+              {docInfo.breakTime && docInfo.breakTime.start && docInfo.breakTime.end && (
+                <div className='bg-white rounded-2xl p-6 border-2 border-purple-200'>
+                  <h3 className='text-xl font-bold text-purple-900 mb-4 flex items-center gap-2'>
+                    <span className='text-2xl'>☕</span>
+                    Break Time
+                  </h3>
+                  <div className='bg-orange-100 text-orange-700 px-4 py-2 rounded-lg font-semibold border-2 border-orange-300 inline-block'>
+                    {docInfo.breakTime.start} - {docInfo.breakTime.end}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Booking Section */}
         <div className='bg-gradient-to-br from-white to-purple-50 rounded-3xl shadow-xl border-2 border-purple-200 p-8 mb-12'>
           <h2 className='text-3xl font-bold text-purple-900 mb-8 flex items-center gap-3'>
@@ -160,11 +264,10 @@ const Appointment = () => {
                 <button
                   key={index}
                   onClick={() => setSelectedDay(day)}
-                  className={`p-4 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${
-                    selectedDay?.date === day.date
-                      ? 'bg-purple-700 text-white border-purple-700 shadow-lg'
-                      : 'bg-white text-purple-900 border-purple-200 hover:border-purple-400'
-                  }`}
+                  className={`p-4 rounded-2xl border-2 transition-all duration-300 hover:scale-105 ${selectedDay?.date === day.date
+                    ? 'bg-purple-700 text-white border-purple-700 shadow-lg'
+                    : 'bg-white text-purple-900 border-purple-200 hover:border-purple-400'
+                    }`}
                 >
                   <p className='text-xs font-semibold mb-1'>{day.day}</p>
                   <p className='text-2xl font-bold'>{day.date}</p>
@@ -182,11 +285,10 @@ const Appointment = () => {
                 <button
                   key={index}
                   onClick={() => setSelectedTime(time)}
-                  className={`p-3 rounded-xl border-2 transition-all duration-300 hover:scale-105 font-semibold ${
-                    selectedTime === time
-                      ? 'bg-purple-700 text-white border-purple-700 shadow-lg'
-                      : 'bg-white text-purple-900 border-purple-200 hover:border-purple-400'
-                  }`}
+                  className={`p-3 rounded-xl border-2 transition-all duration-300 hover:scale-105 font-semibold ${selectedTime === time
+                    ? 'bg-purple-700 text-white border-purple-700 shadow-lg'
+                    : 'bg-white text-purple-900 border-purple-200 hover:border-purple-400'
+                    }`}
                 >
                   {time}
                 </button>
@@ -231,7 +333,7 @@ const Appointment = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className='p-6 text-center bg-white'>
                     <h3 className='font-bold text-purple-900 text-lg mb-2 group-hover:text-purple-700 transition-colors'>
                       {doctor.name}

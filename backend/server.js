@@ -17,6 +17,8 @@ connectCloudinary()
 //middlewares
 app.use(express.json())
 app.use(cors())
+// Serve uploaded images
+app.use('/uploads', express.static('uploads'))
 
 
 //api endpoint

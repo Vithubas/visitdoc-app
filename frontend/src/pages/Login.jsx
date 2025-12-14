@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
 
   const { backendUrl, token, setToken } = useContext(AppContext)
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ const Login = () => {
     event.preventDefault()
     try {
       if (state === 'Register') {
-        const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
+        const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password, phone })
         if (data.success) {
           localStorage.setItem('token', data.token)
           setToken(data.token)
@@ -78,6 +79,22 @@ const Login = () => {
                   value={name}
                   required
                   placeholder="Enter your name"
+                  className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition"
+                />
+              </div>
+            )}
+
+            {state === 'Register' && (
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  onChange={(e) => setPhone(e.target.value)}
+                  value={phone}
+                  required
+                  placeholder="Enter your phone number"
                   className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition"
                 />
               </div>

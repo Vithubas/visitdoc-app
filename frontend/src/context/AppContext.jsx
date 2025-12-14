@@ -1,6 +1,5 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { doctors as staticDoctors } from "../assets/assets";
 
 export const AppContext = createContext()
 
@@ -9,21 +8,19 @@ const AppContextProvider = (props) => {
    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000';
    const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : false);
    const [userData, setUserData] = useState(false);
-   const [doctors, setDoctors] = useState(staticDoctors); // Start with static doctors
+   const [doctors, setDoctors] = useState([]);
 
-   // Fetch doctors from backend and merge with static
+   // Fetch doctors from backend
    const getDoctors = async () => {
       try {
          const { data } = await axios.post(backendUrl + '/api/doctor/list');
          if (data.success) {
-            // Merge database doctors with static doctors
-            const dbDoctors = data.doctors || [];
-            const mergedDoctors = [...staticDoctors, ...dbDoctors];
-            setDoctors(mergedDoctors);
+            setDoctors(data.doctors);
+         } else {
+            console.error('Failed to fetch doctors:', data.message);
          }
       } catch (error) {
          console.error('Error fetching doctors:', error);
-         // Keep static doctors if API fails
       }
    };
 

@@ -91,9 +91,8 @@ const registerDoctor = async (req, res) => {
         let imageUrl = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect fill='%236366f1' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='80' fill='white'%3E" + name.charAt(0).toUpperCase() + "%3C/text%3E%3C/svg%3E"
 
         if (imageFile) {
-            const { v2: cloudinary } = await import('cloudinary')
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
-            imageUrl = imageUpload.secure_url
+            // Use local file path
+            imageUrl = `http://localhost:4000/uploads/${imageFile.filename}`
         }
 
         // Create new doctor
@@ -196,6 +195,29 @@ const appointmentCancel = async (req, res) => {
     }
 }
 
+// API to delete appointment for doctor panel 
+const deleteAppointment = async (req, res) => {
+    try {
+
+        const { docId, appointmentId } = req.body
+
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        if (appointmentData && appointmentData.docId === docId) {
+
+            await appointmentModel.findByIdAndDelete(appointmentId)
+            res.json({ success: true, message: "Appointment Deleted" })
+
+        } else {
+            res.json({ success: false, message: "Delete Failed" })
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
 // API to get dashboard data for doctor panel 
 const doctorDashboard = async (req, res) => {
     try {
@@ -275,17 +297,18 @@ const updateDoctorProfile = async (req, res) => {
             updateData.breakTime = typeof breakTime === 'string' ? JSON.parse(breakTime) : breakTime
         }
 
-        // Upload image to cloudinary if provided
+        // Upload image to local storage if provided
         if (imageFile) {
-            const { v2: cloudinary } = await import('cloudinary')
-            const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })
-            updateData.image = imageUpload.secure_url
+            // Use local file path
+            updateData.image = `http://localhost:4000/uploads/${imageFile.filename}`
         }
 
+        console.log('Update data:', updateData)
         await doctorModel.findByIdAndUpdate(docId, updateData)
 
         // Fetch and return updated profile data
         const updatedProfile = await doctorModel.findById(docId).select('-password')
+        console.log('Updated profile:', updatedProfile)
 
         res.json({ success: true, message: "Profile Updated", profileData: updatedProfile })
 
@@ -303,6 +326,7 @@ export {
     appointmentsDoctor,
     appointmentCancel,
     appointmentComplete,
+    deleteAppointment,
     doctorDashboard,
     doctorProfile,
     updateDoctorProfile

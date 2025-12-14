@@ -63,6 +63,23 @@ const DoctorContextProvider = (props) => {
         }
     }
 
+    const deleteAppointment = async (appointmentId) => {
+        try {
+            if (window.confirm('Are you sure you want to delete this appointment? This action cannot be undone.')) {
+                const { data } = await axios.post(backendUrl + '/api/doctor/delete-appointment', { appointmentId }, { headers: { dToken } })
+                if (data.success) {
+                    toast.success(data.message)
+                    getAppointments()
+                } else {
+                    toast.error(data.message)
+                }
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
     const getDashData = async () => {
         try {
 
@@ -102,6 +119,7 @@ const DoctorContextProvider = (props) => {
         getAppointments,
         completeAppointment,
         cancelAppointment,
+        deleteAppointment,
         dashData, setDashData,
         getDashData,
         profileData, setProfileData,
