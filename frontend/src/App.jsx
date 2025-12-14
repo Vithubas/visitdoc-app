@@ -10,26 +10,43 @@ import MyAppointments from './pages/MyAppointments'
 import Appointment from './pages/Appointment'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import DoctorApp from './DoctorApp'
+import SymptomChecker from './pages/SymptomChecker'
 
 const App = () => {
   return (
     <div className='mx-4 sm:mx-[10%]'>
-      <Navbar/>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/doctors' element={<Doctors/>}/>
-        <Route path='/doctors/:speciality' element={<Doctors/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/contact' element ={<Contacts/>}/>
-        <Route path='/my-profile' element={<MyProfile/>}/>
-        <Route path='/my-appointments' element={<MyAppointments/>}/>
-        <Route path='/appointments/:docId' element={<Appointment/>}/>
-        <Route path='/about' element ={<About/>}/>
+        {/* Doctor Routes */}
+        <Route path='/doctor-login/*' element={<DoctorApp />} />
+        <Route path='/doctor-register/*' element={<DoctorApp />} />
+        <Route path='/doctor-dashboard/*' element={<DoctorApp />} />
+        <Route path='/doctor-appointments/*' element={<DoctorApp />} />
+        <Route path='/doctor-profile/*' element={<DoctorApp />} />
 
+        {/* Patient Routes */}
+        <Route path='/*' element={
+          <>
+            <Navbar />
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/doctors' element={<Doctors />} />
+              <Route path='/doctors/:speciality' element={<Doctors />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/contact' element={<Contacts />} />
+              <Route path='/my-profile' element={<MyProfile />} />
+              <Route path='/my-appointments' element={<MyAppointments />} />
+              <Route path='/my-appointments' element={<MyAppointments />} />
+              <Route path='/appointments/:docId' element={<Appointment />} />
+              <Route path='/symptom-checker' element={<SymptomChecker />} />
+              <Route path='/about' element={<About />} />
+            </Routes>
+            <Footer />
+          </>
+        } />
       </Routes>
-      <Footer/>
-      
-      
+
+
     </div>
   )
 }

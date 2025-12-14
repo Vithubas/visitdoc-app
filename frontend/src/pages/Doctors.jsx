@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 const Doctors = () => {
 
-  const {speciality} = useParams();
-  const [filterDoc,setFilterDoc] = useState([]);
+  const { speciality } = useParams();
+  const [filterDoc, setFilterDoc] = useState([]);
   const navigate = useNavigate();
-  const {doctors} = useContext(AppContext);
-  
+  const { doctors } = useContext(AppContext);
+
   const specialties = [
     { name: 'Psychiatrist', icon: '🧠' },
     { name: 'Pediatricians', icon: '👶' },
@@ -18,20 +18,30 @@ const Doctors = () => {
     { name: 'Neurologist', icon: '🧬' },
     { name: 'Gynecologist', icon: '👩‍⚕️' },
     { name: 'Cardiologist', icon: '❤️' },
-    { name: 'Dermatologist', icon: '✨' }
+    { name: 'Dermatologist', icon: '✨' },
+    { name: 'General Physician', icon: '👨‍⚕️' },
+    { name: 'Vascular Surgeon', icon: '🩸' },
+    { name: 'Pulmonologist', icon: '🫁' },
+    { name: 'Proctologist', icon: '⚕️' },
+    { name: 'Rheumatologist', icon: '🦵' },
+    { name: 'Gastroenterologist', icon: '🍽️' },
+    { name: 'Hepatologist', icon: '🏥' },
+    { name: 'Endocrinologist', icon: '🍬' },
+    { name: 'ENT Specialist', icon: '👂' },
+    { name: 'Urologist', icon: '💧' }
   ];
-  
+
   const applyFilter = () => {
-    if(speciality){
-      setFilterDoc(doctors.filter((doc)=>doc.specialty===speciality));
-    }else{
+    if (speciality) {
+      setFilterDoc(doctors.filter((doc) => doc.specialty === speciality));
+    } else {
       setFilterDoc(doctors);
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     applyFilter();
-  },[doctors,speciality]);
+  }, [doctors, speciality]);
 
   return (
     <div className='min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8'>
@@ -55,11 +65,10 @@ const Doctors = () => {
               <div className='space-y-2'>
                 <button
                   onClick={() => navigate('/doctors')}
-                  className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 ${
-                    !speciality 
-                      ? 'bg-purple-700 text-white shadow-lg transform scale-105' 
-                      : 'bg-white text-purple-700 hover:bg-purple-200 hover:translate-x-2'
-                  }`}
+                  className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 ${!speciality
+                    ? 'bg-purple-700 text-white shadow-lg transform scale-105'
+                    : 'bg-white text-purple-700 hover:bg-purple-200 hover:translate-x-2'
+                    }`}
                 >
                   <span className='text-xl'>🔍</span>
                   <span className='font-medium'>All Doctors</span>
@@ -68,11 +77,10 @@ const Doctors = () => {
                   <button
                     key={index}
                     onClick={() => navigate(`/doctors/${spec.name}`)}
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 ${
-                      speciality === spec.name 
-                        ? 'bg-purple-700 text-white shadow-lg transform scale-105' 
-                        : 'bg-white text-purple-700 hover:bg-purple-200 hover:translate-x-2'
-                    }`}
+                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center gap-3 ${speciality === spec.name
+                      ? 'bg-purple-700 text-white shadow-lg transform scale-105'
+                      : 'bg-white text-purple-700 hover:bg-purple-200 hover:translate-x-2'
+                      }`}
                   >
                     <span className='text-xl'>{spec.icon}</span>
                     <span className='font-medium'>{spec.name}</span>
@@ -97,6 +105,11 @@ const Doctors = () => {
                         className='w-32 h-32 object-cover mx-auto rounded-full border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500'
                         src={item.image}
                         alt={item.name}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          const initial = item.name?.charAt(0).toUpperCase() || 'D';
+                          e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect fill='%236366f1' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='80' fill='white'%3E${initial}%3C/text%3E%3C/svg%3E`;
+                        }}
                       />
                       <div className='absolute top-4 right-4 bg-white rounded-full px-3 py-1 shadow-md border border-purple-200'>
                         <div className='flex items-center gap-2 text-sm text-green-600 font-semibold'>
@@ -105,7 +118,7 @@ const Doctors = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className='p-6 text-center bg-white'>
                       <h3 className='font-bold text-purple-900 text-xl mb-2 group-hover:text-purple-700 transition-colors'>
                         {item.name}
@@ -113,7 +126,7 @@ const Doctors = () => {
                       <p className='text-purple-600 font-medium mb-3 bg-purple-100 inline-block px-4 py-1 rounded-full border border-purple-200'>
                         {item.specialty}
                       </p>
-                      
+
                     </div>
                   </div>
                 ))}

@@ -1,29 +1,30 @@
-import React, { useState } from 'react'
-import {assets} from '../assets/assets'
+import React, { useContext, useState } from 'react'
+import { assets } from '../assets/assets'
 import { NavLink } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../context/AppContext';
 
 const Navbar = () => {
-    const navigate = useNavigate();
-    const [showMenu, setShowMenu] = useState(false);
-    const [token, setToken] = useState(true);
-    const [showProfileMenu, setShowProfileMenu] = useState(false); // Add this state
+  const navigate = useNavigate();
+  const [showMenu, setShowMenu] = useState(false);
+  const { token, setToken } = useContext(AppContext);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   return (
     <nav className='sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-md border-b-2 border-purple-100'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex items-center justify-between py-4'>
           {/* Logo Section */}
-          <div 
-            onClick={() => navigate('/')} 
+          <div
+            onClick={() => navigate('/')}
             className='flex items-center gap-3 cursor-pointer group'
           >
             <div className='relative'>
               <div className='absolute inset-0 bg-purple-400 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity'></div>
-              <img 
-                className='relative w-16 h-16 rounded-full border-2 border-purple-200 group-hover:border-purple-400 transition-all duration-300 group-hover:scale-110' 
-                src={assets.logo} 
-                alt='VisitDoc Logo'  
+              <img
+                className='relative w-16 h-16 rounded-full border-2 border-purple-200 group-hover:border-purple-400 transition-all duration-300 group-hover:scale-110'
+                src={assets.logo}
+                alt='VisitDoc Logo'
               />
             </div>
             <span className='text-2xl font-bold bg-gradient-to-r from-purple-700 to-purple-900 bg-clip-text text-transparent'>
@@ -33,13 +34,12 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <ul className='hidden md:flex items-center gap-8'>
-            <NavLink 
-              to='/' 
+            <NavLink
+              to='/'
               className={({ isActive }) =>
-                `relative py-2 px-1 font-semibold transition-all duration-300 ${
-                  isActive 
-                    ? 'text-purple-700' 
-                    : 'text-gray-600 hover:text-purple-600'
+                `relative py-2 px-1 font-semibold transition-all duration-300 ${isActive
+                  ? 'text-purple-700'
+                  : 'text-gray-600 hover:text-purple-600'
                 }`
               }
             >
@@ -53,13 +53,12 @@ const Navbar = () => {
               )}
             </NavLink>
 
-            <NavLink 
-              to='/doctors' 
+            <NavLink
+              to='/doctors'
               className={({ isActive }) =>
-                `relative py-2 px-1 font-semibold transition-all duration-300 ${
-                  isActive 
-                    ? 'text-purple-700' 
-                    : 'text-gray-600 hover:text-purple-600'
+                `relative py-2 px-1 font-semibold transition-all duration-300 ${isActive
+                  ? 'text-purple-700'
+                  : 'text-gray-600 hover:text-purple-600'
                 }`
               }
             >
@@ -73,13 +72,12 @@ const Navbar = () => {
               )}
             </NavLink>
 
-            <NavLink 
-              to='/about' 
+            <NavLink
+              to='/about'
               className={({ isActive }) =>
-                `relative py-2 px-1 font-semibold transition-all duration-300 ${
-                  isActive 
-                    ? 'text-purple-700' 
-                    : 'text-gray-600 hover:text-purple-600'
+                `relative py-2 px-1 font-semibold transition-all duration-300 ${isActive
+                  ? 'text-purple-700'
+                  : 'text-gray-600 hover:text-purple-600'
                 }`
               }
             >
@@ -93,13 +91,12 @@ const Navbar = () => {
               )}
             </NavLink>
 
-            <NavLink 
-              to='/contact' 
+            <NavLink
+              to='/contact'
               className={({ isActive }) =>
-                `relative py-2 px-1 font-semibold transition-all duration-300 ${
-                  isActive 
-                    ? 'text-purple-700' 
-                    : 'text-gray-600 hover:text-purple-600'
+                `relative py-2 px-1 font-semibold transition-all duration-300 ${isActive
+                  ? 'text-purple-700'
+                  : 'text-gray-600 hover:text-purple-600'
                 }`
               }
             >
@@ -112,26 +109,45 @@ const Navbar = () => {
                 </>
               )}
             </NavLink>
+
+            <NavLink
+              to='/symptom-checker'
+              className={({ isActive }) =>
+                `relative py-2 px-1 font-semibold transition-all duration-300 ${isActive
+                  ? 'text-purple-700'
+                  : 'text-gray-600 hover:text-purple-600'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  AI HELP
+                  {isActive && (
+                    <span className='absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full'></span>
+                  )}
+                </>
+              )}
+            </NavLink>
           </ul>
 
           {/* User Profile / Register Button */}
           <div className='flex items-center gap-4'>
             {token ? (
               <div className='relative'>
-                <div 
+                <div
                   onClick={() => setShowProfileMenu(!showProfileMenu)} // Change to onClick
                   className='flex items-center gap-2 cursor-pointer bg-gradient-to-r from-purple-50 to-purple-100 px-4 py-2 rounded-full border-2 border-purple-200 hover:border-purple-400 transition-all duration-300 hover:shadow-lg'
                 >
-                  <img 
-                    className='w-10 h-10 rounded-full border-2 border-white shadow-md object-cover' 
-                    src={assets.profile1} 
-                    alt="Profile" 
+                  <img
+                    className='w-10 h-10 rounded-full border-2 border-white shadow-md object-cover'
+                    src={assets.profile1}
+                    alt="Profile"
                   />
                   <span className='hidden sm:block text-purple-900 font-semibold'>Account</span>
-                  <svg 
+                  <svg
                     className={`w-4 h-4 text-purple-700 transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`}
-                    fill='none' 
-                    stroke='currentColor' 
+                    fill='none'
+                    stroke='currentColor'
                     viewBox='0 0 24 24'
                   >
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M19 9l-7 7-7-7' />
@@ -146,7 +162,7 @@ const Navbar = () => {
                         <p className='font-bold text-lg'>Welcome Back!</p>
                         <p className='text-purple-100 text-sm'>Manage your account</p>
                       </div>
-                      
+
                       <div className='p-2'>
                         <button
                           onClick={() => {
@@ -160,7 +176,7 @@ const Navbar = () => {
                           </svg>
                           <span className='font-medium'>My Profile</span>
                         </button>
-                        
+
                         <button
                           onClick={() => {
                             navigate('my-appointments');
@@ -173,9 +189,9 @@ const Navbar = () => {
                           </svg>
                           <span className='font-medium'>My Appointments</span>
                         </button>
-                        
+
                         <div className='border-t border-purple-100 my-2'></div>
-                        
+
                         <button
                           onClick={() => {
                             setToken(false);
@@ -194,8 +210,8 @@ const Navbar = () => {
                 )}
               </div>
             ) : (
-              <button 
-                onClick={() => navigate('/login')} 
+              <button
+                onClick={() => navigate('/login')}
                 className='hidden md:flex items-center gap-2 bg-gradient-to-r from-purple-600 to-purple-800 text-white px-6 py-3 rounded-full font-bold hover:from-purple-700 hover:to-purple-900 transition-all duration-300 hover:shadow-lg hover:scale-105'
               >
                 <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -206,7 +222,7 @@ const Navbar = () => {
             )}
 
             {/* Mobile Menu Button */}
-            <button 
+            <button
               onClick={() => setShowMenu(!showMenu)}
               className='md:hidden p-2 rounded-lg hover:bg-purple-50 transition-colors'
             >
@@ -227,74 +243,83 @@ const Navbar = () => {
         {showMenu && (
           <div className='md:hidden py-4 border-t border-purple-100'>
             <div className='flex flex-col gap-2'>
-              <NavLink 
-                to='/' 
+              <NavLink
+                to='/'
                 onClick={() => setShowMenu(false)}
                 className={({ isActive }) =>
-                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-purple-100 text-purple-700' 
-                      : 'text-gray-600 hover:bg-purple-50'
+                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${isActive
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-600 hover:bg-purple-50'
                   }`
                 }
               >
                 HOME
               </NavLink>
 
-              <NavLink 
-                to='/doctors' 
+              <NavLink
+                to='/doctors'
                 onClick={() => setShowMenu(false)}
                 className={({ isActive }) =>
-                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-purple-100 text-purple-700' 
-                      : 'text-gray-600 hover:bg-purple-50'
+                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${isActive
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-600 hover:text-purple-600'
                   }`
                 }
               >
                 DOCTORS
               </NavLink>
 
-              <NavLink 
-                to='/about' 
+              <NavLink
+                to='/about'
                 onClick={() => setShowMenu(false)}
                 className={({ isActive }) =>
-                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-purple-100 text-purple-700' 
-                      : 'text-gray-600 hover:bg-purple-50'
+                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${isActive
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-600 hover:text-purple-600'
                   }`
                 }
               >
                 ABOUT
               </NavLink>
 
-              <NavLink 
-                to='/contact' 
+              <NavLink
+                to='/contact'
                 onClick={() => setShowMenu(false)}
                 className={({ isActive }) =>
-                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-purple-100 text-purple-700' 
-                      : 'text-gray-600 hover:bg-purple-50'
+                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${isActive
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-600 hover:text-purple-600'
                   }`
                 }
               >
                 CONTACT
               </NavLink>
 
+              <NavLink
+                to='/symptom-checker'
+                onClick={() => setShowMenu(false)}
+                className={({ isActive }) =>
+                  `px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${isActive
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-600 hover:text-purple-600'
+                  }`
+                }
+              >
+                AI HELP
+              </NavLink>
+
               {!token && (
-                <button 
+                <button
                   onClick={() => {
                     navigate('/login');
                     setShowMenu(false);
-                  }} 
+                  }}
                   className='mt-2 bg-gradient-to-r from-purple-600 to-purple-800 text-white px-6 py-3 rounded-full font-bold hover:from-purple-700 hover:to-purple-900 transition-all duration-300'
                 >
                   Register
                 </button>
               )}
-              
+
             </div>
           </div>
         )}

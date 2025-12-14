@@ -1,15 +1,50 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { AppContext } from '../context/AppContext'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [state, setState] = useState('Register')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  
-  const onSubmitHandler = async(event) => {
+
+  const { backendUrl, token, setToken } = useContext(AppContext)
+  const navigate = useNavigate()
+
+  const onSubmitHandler = async (event) => {
     event.preventDefault()
+    try {
+      if (state === 'Register') {
+        const { data } = await axios.post(backendUrl + '/api/user/register', { name, email, password })
+        if (data.success) {
+          localStorage.setItem('token', data.token)
+          setToken(data.token)
+        } else {
+          toast.error(data.message)
+        }
+
+      } else {
+        const { data } = await axios.post(backendUrl + '/api/user/login', { email, password })
+        if (data.success) {
+          localStorage.setItem('token', data.token)
+          setToken(data.token)
+        } else {
+          toast.error(data.message)
+        }
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
-  
+
+  useEffect(() => {
+    if (token) {
+      navigate('/')
+    }
+  }, [token])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -47,7 +82,7 @@ const Login = () => {
                 />
               </div>
             )}
-            
+
             <div>
               <label className="block text-white text-sm font-medium mb-2">
                 Email
@@ -61,7 +96,7 @@ const Login = () => {
                 className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition"
               />
             </div>
-            
+
             <div>
               <label className="block text-white text-sm font-medium mb-2">
                 Password
