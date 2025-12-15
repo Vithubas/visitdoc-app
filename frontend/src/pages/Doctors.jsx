@@ -20,6 +20,7 @@ const Doctors = () => {
     { name: 'Cardiologist', icon: '❤️' },
     { name: 'Dermatologist', icon: '✨' },
     { name: 'General Physician', icon: '👨‍⚕️' },
+    { name: 'General Surgeon', icon: '🔪' },
     { name: 'Vascular Surgeon', icon: '🩸' },
     { name: 'Pulmonologist', icon: '🫁' },
     { name: 'Proctologist', icon: '⚕️' },
@@ -33,7 +34,9 @@ const Doctors = () => {
 
   const applyFilter = () => {
     if (speciality) {
-      setFilterDoc(doctors.filter((doc) => doc.specialty === speciality));
+      setFilterDoc(doctors.filter((doc) =>
+        doc.speciality?.toLowerCase() === speciality.toLowerCase()
+      ));
     } else {
       setFilterDoc(doctors);
     }
@@ -124,8 +127,12 @@ const Doctors = () => {
                         {item.name}
                       </h3>
                       <p className='text-purple-600 font-medium mb-3 bg-purple-100 inline-block px-4 py-1 rounded-full border border-purple-200'>
-                        {item.specialty}
+                        {item.speciality}
                       </p>
+                      <div className='flex items-center justify-center gap-2 text-gray-700'>
+                        <span className='text-2xl'>💰</span>
+                        <span className='font-bold text-lg'>₹{item.fees}</span>
+                      </div>
 
                     </div>
                   </div>

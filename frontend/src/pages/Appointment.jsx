@@ -141,7 +141,7 @@ const Appointment = () => {
 
               <div className='mb-4'>
                 <span className='inline-block bg-purple-100 text-purple-700 px-4 py-2 rounded-full font-semibold text-lg border-2 border-purple-200'>
-                  {docInfo.specialty}
+                  {docInfo.speciality}
                 </span>
               </div>
 
@@ -169,7 +169,7 @@ const Appointment = () => {
                 <span className='text-3xl'>💰</span>
                 <div>
                   <p className='text-purple-600 text-sm font-medium'>Appointment Fee</p>
-                  <p className='text-3xl font-bold text-purple-900'><span>{currencySymbol}{docInfo.fee}</span></p>
+                  <p className='text-3xl font-bold text-purple-900'><span>{currencySymbol}{docInfo.fees}</span></p>
                 </div>
               </div>
             </div>
@@ -325,6 +325,11 @@ const Appointment = () => {
                       className='w-32 h-32 object-cover mx-auto rounded-full border-4 border-white shadow-lg group-hover:scale-110 transition-transform duration-500'
                       src={doctor.image}
                       alt={doctor.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        const initial = doctor.name?.charAt(0).toUpperCase() || 'D';
+                        e.target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect fill='%236366f1' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='80' fill='white'%3E${initial}%3C/text%3E%3C/svg%3E`;
+                      }}
                     />
                     <div className='absolute top-4 right-4 bg-white rounded-full px-3 py-1 shadow-md border border-purple-200'>
                       <div className='flex items-center gap-2 text-xs text-green-600 font-semibold'>
@@ -339,7 +344,7 @@ const Appointment = () => {
                       {doctor.name}
                     </h3>
                     <p className='text-purple-600 font-medium text-sm bg-purple-100 inline-block px-3 py-1 rounded-full border border-purple-200'>
-                      {doctor.specialty}
+                      {doctor.speciality}
                     </p>
                   </div>
                 </div>

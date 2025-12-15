@@ -9,7 +9,7 @@ import appointmentModel from '../models/appointmentModel.js'
 // API to register user
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body
+        const { name, email, password, phone } = req.body
 
         if (!name || !email || !password) {
             return res.json({ success: false, message: "Missing Details" })
@@ -32,7 +32,8 @@ const registerUser = async (req, res) => {
         const userData = {
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            phone: phone || '0000000000'
         }
 
         const newUser = new userModel(userData)

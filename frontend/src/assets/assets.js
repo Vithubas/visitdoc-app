@@ -80,7 +80,7 @@ export const specialties = [
         specialty: 'Ophthalmologist',
         image: ophthalmology
     },
-    { specialty: 'General Surgeon', image: docGenPhysician }
+
 ];
 
 

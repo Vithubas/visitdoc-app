@@ -180,12 +180,25 @@ const DoctorRegister = () => {
                             required
                         >
                             <option value="">Select Speciality</option>
-                            <option value="General physician">General Physician</option>
+                            <option value="General Physician">General Physician</option>
+                            <option value="General Surgeon">General Surgeon</option>
                             <option value="Gynecologist">Gynecologist</option>
                             <option value="Dermatologist">Dermatologist</option>
                             <option value="Pediatricians">Pediatricians</option>
                             <option value="Neurologist">Neurologist</option>
                             <option value="Gastroenterologist">Gastroenterologist</option>
+                            <option value="Cardiologist">Cardiologist</option>
+                            <option value="Psychiatrist">Psychiatrist</option>
+                            <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
+                            <option value="Ophthalmologist">Ophthalmologist</option>
+                            <option value="Vascular Surgeon">Vascular Surgeon</option>
+                            <option value="Pulmonologist">Pulmonologist</option>
+                            <option value="Proctologist">Proctologist</option>
+                            <option value="Rheumatologist">Rheumatologist</option>
+                            <option value="Hepatologist">Hepatologist</option>
+                            <option value="Endocrinologist">Endocrinologist</option>
+                            <option value="ENT Specialist">ENT Specialist</option>
+                            <option value="Urologist">Urologist</option>
                         </select>
                     </div>
 

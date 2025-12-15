@@ -41,7 +41,7 @@ const DoctorDashboard = () => {
                 <div className='flex items-center gap-4 bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200 cursor-pointer hover:scale-105 transition-all shadow-md'>
                     <span className='text-6xl'>💰</span>
                     <div>
-                        <p className='text-3xl font-bold text-green-700'>${dashData.earnings}</p>
+                        <p className='text-3xl font-bold text-green-700'>₹{dashData.earnings}</p>
                         <p className='text-green-600 font-medium'>Total Earnings</p>
                     </div>
                 </div>
@@ -81,7 +81,7 @@ const DoctorDashboard = () => {
                                     <p className='text-gray-500 text-sm'>{item.slotDate} at {item.slotTime}</p>
                                 </div>
                                 <div className='text-right'>
-                                    <p className='text-gray-700 font-semibold'>${item.amount}</p>
+                                    <p className='text-gray-700 font-semibold'>₹{item.amount}</p>
                                 </div>
                                 {item.cancelled
                                     ? <span className='px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-semibold'>Cancelled</span>

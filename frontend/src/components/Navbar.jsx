@@ -28,7 +28,7 @@ const Navbar = () => {
               />
             </div>
             <span className='text-2xl font-bold bg-gradient-to-r from-purple-700 to-purple-900 bg-clip-text text-transparent'>
-              VisitDoc
+              AI VisitDoc
             </span>
           </div>
 

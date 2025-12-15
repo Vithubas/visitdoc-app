@@ -12,6 +12,8 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import DoctorApp from './DoctorApp'
 import SymptomChecker from './pages/SymptomChecker'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const App = () => {
   return (
@@ -46,7 +48,7 @@ const App = () => {
         } />
       </Routes>
 
-
+      <ToastContainer />
     </div>
   )
 }

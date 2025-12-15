@@ -132,7 +132,7 @@ const DoctorProfile = () => {
                                         <span className='text-3xl'>💰</span>
                                         <div>
                                             <p className='text-xs text-gray-600'>Consultation Fee</p>
-                                            <p className='text-2xl font-bold text-purple-700'>${profileData.fees}</p>
+                                            <p className='text-2xl font-bold text-purple-700'>₹{profileData.fees}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -232,7 +232,7 @@ const DoctorProfile = () => {
                                             />
                                         </div>
                                     ) : (
-                                        <p className='text-3xl font-bold text-purple-700'>${profileData.fees}</p>
+                                        <p className='text-3xl font-bold text-purple-700'>₹{profileData.fees}</p>
                                     )}
                                 </div>
                             </div>
